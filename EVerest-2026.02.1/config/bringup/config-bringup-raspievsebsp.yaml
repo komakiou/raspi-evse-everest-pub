@@ -1,0 +1,16 @@
+active_modules:
+  cli:
+    module: BUEvseBoardSupport
+    standalone: true
+    connections:
+      bsp:
+        - implementation_id: board_support
+          module_id: connector_1_powerpath
+  connector_1_powerpath:
+    config_module:
+      i2c_dev: /dev/i2c-1
+      i2c_freq: 10000
+      i2c_addr: 96
+      caps_min_current_A: 0
+      caps_max_current_A: 10
+    module: RaspiEvseBSP

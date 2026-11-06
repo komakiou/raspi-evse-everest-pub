@@ -1,0 +1,42 @@
+settings:
+  mqtt_everest_prefix: prefix
+active_modules:
+  iso15118_ev:
+    module: PyEvJosev
+    config_module:
+      device: eth1
+      supported_DIN70121: true
+      supported_ISO15118_2: false
+      supported_ISO15118_20_DC: false
+      tls_active: false
+  ev_bsp:
+    module: RaspiEvBSP
+    config_module:
+      i2c_dev: /dev/i2c-1
+      i2c_freq: 10000
+      i2c_addr: 96
+  ev_slac:
+    module: EvSlac
+    config_implementation:
+      main:
+        device: eth1
+  ev_manager:
+    module: EvManager
+    config_module:
+      connector_id: 1
+      auto_enable: true
+      auto_exec: true
+      auto_exec_infinite: true
+      auto_exec_commands: wait_for_real_plugin;iso_wait_pwm_is_running;iso_wait_slac_matched;iso_start_v2g_session DC;iso_wait_pwr_ready;iso_dc_power_on;iso_wait_for_stop 60;iso_wait_v2g_session_stopped;unplug;sleep 5;
+      dc_target_current: 5
+      dc_target_voltage: 444
+    connections:
+      ev_board_support:
+        - module_id: ev_bsp
+          implementation_id: main
+      ev:
+        - module_id: iso15118_ev
+          implementation_id: ev
+      slac:
+        - module_id: ev_slac
+          implementation_id: main
